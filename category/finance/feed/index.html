@@ -1,0 +1,770 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Finance &#8211; Tool Layr</title>
+	<atom:link href="https://toollayr.com/category/finance/feed/" rel="self" type="application/rss+xml" />
+	<link>https://toollayr.com/</link>
+	<description></description>
+	<lastBuildDate>Wed, 03 Jun 2026 16:31:03 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=7.0</generator>
+	<item>
+		<title>Loan EMI Calculator</title>
+		<link>https://toollayr.com/finance/loan-emi-calculator/</link>
+		
+		<dc:creator><![CDATA[mytoollayr]]></dc:creator>
+		<pubDate>Wed, 03 Jun 2026 16:31:03 +0000</pubDate>
+				<category><![CDATA[Finance]]></category>
+		<guid isPermaLink="false">https://toollayr.com/?p=15</guid>
+
+					<description><![CDATA[]]></description>
+										<content:encoded><![CDATA[<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Purpose Loan EMI Calculator - Home, Personal, Car & Business Loans</title>
+    <meta name="description" content="Calculate EMIs for Home, Personal, Car, Business, and Education loans. Features dynamic preset switching, extra prepayment simulation, charts, and detailed amortization schedules.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- STRICT OVERRIDE STYLES TO ENFORCE VALUES AGAINST WORDPRESS THEMES -->
+    <style>
+        /* Force system to isolate all elements within this wrapper container */
+        .wp-isolated-emi-calc, 
+        .wp-isolated-emi-calc * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+            box-sizing: border-box !important;
+        }
+        
+        /* Chart container constraint rules */
+        .wp-isolated-emi-calc .chart-container { 
+            position: relative !important; 
+            height: 280px !important; 
+            width: 100% !important; 
+        }
+
+        /* Enforce Exact Color Schemes natively for active state styling overriding theme defaults */
+        .wp-isolated-emi-calc .loan-tab-active {
+            background-color: #059669 !important;
+            color: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        .wp-isolated-emi-calc .loan-tab-inactive {
+            background-color: #ffffff !important;
+            color: #334155 !important;
+            border-color: #e2e8f0 !important;
+        }
+        
+        .wp-isolated-emi-calc .loan-tab-inactive:hover {
+            background-color: #f8fafc !important;
+        }
+
+        .wp-isolated-emi-calc .btn-primary-action {
+            background-color: #059669 !important;
+            color: #ffffff !important;
+        }
+        
+        .wp-isolated-emi-calc .btn-primary-action:hover {
+            background-color: #047857 !important;
+        }
+
+        /* Form input fields strict standardization safeguards */
+        .wp-isolated-emi-calc input[type="number"], 
+        .wp-isolated-emi-calc select {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 0.5rem !important;
+            padding: 0.375rem 0.75rem !important;
+        }
+
+        /* Clean up background tables allocations */
+        .wp-isolated-emi-calc table {
+            border-collapse: collapse !important;
+            width: 100% !important;
+            background-color: transparent !important;
+        }
+
+        .wp-isolated-emi-calc th {
+            background-color: #f1f5f9 !important;
+            color: #334155 !important;
+        }
+
+        /* Custom input sliders track control styling overrides */
+        .wp-isolated-emi-calc input[type="range"] {
+            accent-color: #059669 !important;
+        }
+
+        @media print {
+            body * { visibility: hidden !important; }
+            #printable-area, #printable-area * { visibility: visible !important; }
+            #printable-area { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 p-4 md:p-8">
+
+    <!-- ISOLATED WRAPPER BLOCK -->
+    <div class="wp-isolated-emi-calc max-w-6xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden border border-slate-100" style="background-color: #ffffff !important;">
+        <div class="p-6 md:p-10">
+            
+            <!-- LOAN TYPE SELECTOR TABS -->
+            <div class="mb-8 border-b border-slate-200 pb-4" style="border-bottom-color: #e2e8f0 !important;">
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-3" style="color: #64748b !important;">Select Loan Type</label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2" id="loanTypeContainer">
+                    <button data-type="home" class="loan-tab loan-tab-active px-4 py-3 text-sm font-bold rounded-xl border transition-all text-center cursor-pointer shadow-sm">
+                        <img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f3e0.png" alt="🏠" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Home Loan
+                    </button>
+                    <button data-type="personal" class="loan-tab loan-tab-inactive px-4 py-3 text-sm font-bold rounded-xl border transition-all text-center cursor-pointer">
+                        <img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f464.png" alt="👤" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Personal Loan
+                    </button>
+                    <button data-type="car" class="loan-tab loan-tab-inactive px-4 py-3 text-sm font-bold rounded-xl border transition-all text-center cursor-pointer">
+                        <img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f697.png" alt="🚗" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Car Loan
+                    </button>
+                    <button data-type="business" class="loan-tab loan-tab-inactive px-4 py-3 text-sm font-bold rounded-xl border transition-all text-center cursor-pointer">
+                        <img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f4bc.png" alt="💼" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Business Loan
+                    </button>
+                    <button data-type="education" class="loan-tab loan-tab-inactive px-4 py-3 text-sm font-bold rounded-xl border transition-all text-center cursor-pointer">
+                        <img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f393.png" alt="🎓" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Education Loan
+                    </button>
+                </div>
+            </div>
+
+            <!-- CALCULATOR HEADER TEXT -->
+            <div class="mb-8">
+                <h1 id="calculatorTitle" class="text-3xl font-bold mb-2" style="color: #0f172a !important;">home loan emi calculator</h1>
+                <p id="calculatorDesc" class="text-slate-600 text-sm md:text-base" style="color: #475569 !important;">Calculate your long-term housing finance requirements with accurate yearly breaking structures.</p>
+            </div>
+
+            <!-- CALCULATOR CORE GRID -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- INPUT CONTROLS -->
+                <div class="lg:col-span-7 space-y-6">
+                    
+                    <!-- Global Currency -->
+                    <div>
+                        <label class="block text-sm font-semibold mb-2" style="color: #0f172a !important;" for="currency">Select Currency</label>
+                        <select id="currency" class="w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+                            <option value="USD">$ (USD)</option>
+                            <option value="EUR">€ (EUR)</option>
+                            <option value="GBP">£ (GBP)</option>
+                            <option value="INR">₹ (INR)</option>
+                            <option value="PKR">Rs (PKR)</option>
+                            <option value="AED">AED</option>
+                            <option value="CAD">$ (CAD)</option>
+                            <option value="AUD">$ (AUD)</option>
+                        </select>
+                    </div>
+
+                    <!-- Principal Amount -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-semibold" style="color: #0f172a !important;" for="amountInput">Loan Amount</label>
+                            <div class="flex items-center border border-slate-300 rounded-lg overflow-hidden" style="border-color: #cbd5e1 !important;">
+                                <span class="bg-slate-100 px-3 text-slate-600 text-sm font-medium currency-label" style="background-color: #f1f5f9 !important; color: #475569 !important;">$</span>
+                                <input type="number" id="amountInput" value="250000" class="w-32 px-2 py-1 text-right font-bold focus:outline-none" style="border:none !important; padding: 4px 8px !important;">
+                            </div>
+                        </div>
+                        <input type="range" id="amountSlider" min="1000" max="10000000" step="1000" value="250000" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <!-- Interest Rate -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-semibold" style="color: #0f172a !important;" for="rateInput">Interest Rate (% P.A.)</label>
+                            <div class="flex items-center border border-slate-300 rounded-lg overflow-hidden" style="border-color: #cbd5e1 !important;">
+                                <input type="number" id="rateInput" value="7.5" step="0.1" class="w-20 px-2 py-1 text-right font-bold focus:outline-none" style="border:none !important; padding: 4px 8px !important;">
+                                <span class="bg-slate-100 px-3 text-slate-600 text-sm font-medium" style="background-color: #f1f5f9 !important; color: #475569 !important;">%</span>
+                            </div>
+                        </div>
+                        <input type="range" id="rateSlider" min="1" max="25" step="0.1" value="7.5" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <!-- Tenure Years -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-semibold" style="color: #0f172a !important;" for="tenureInput">Loan Tenure (Years)</label>
+                            <div class="flex items-center border border-slate-300 rounded-lg overflow-hidden" style="border-color: #cbd5e1 !important;">
+                                <input type="number" id="tenureInput" value="20" class="w-20 px-2 py-1 text-right font-bold focus:outline-none" style="border:none !important; padding: 4px 8px !important;">
+                                <span class="bg-slate-100 px-3 text-slate-600 text-sm font-medium" style="background-color: #f1f5f9 !important; color: #475569 !important;">Yrs</span>
+                            </div>
+                        </div>
+                        <input type="range" id="tenureSlider" min="1" max="40" step="1" value="20" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <!-- PRE-PAYMENT CONFIGURATIONS -->
+                    <div class="rounded-xl p-4 border" style="background-color: #f8fafc !important; border-color: #e2e8f0 !important;">
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" id="enablePrepayment" class="w-4 h-4 border-slate-300 rounded focus:ring-emerald-500" style="accent-color: #059669 !important;">
+                            <span class="text-sm font-bold text-slate-900" style="color: #0f172a !important;">Make Extra Payments (Simulate Pre-payments)</span>
+                        </label>
+                        
+                        <div id="prepaymentForm" class="mt-4 pt-4 border-t border-slate-200 hidden space-y-4" style="border-top-color: #e2e8f0 !important;">
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <label class="text-xs font-semibold text-slate-700" style="color: #334155 !important;" for="monthlyPrepayment">Extra Monthly Payment</label>
+                                    <span class="text-xs font-bold text-emerald-700 currency-label" style="color: #047857 !important;">$</span>
+                                </div>
+                                <input type="number" id="monthlyPrepayment" value="250" min="0" class="w-full font-semibold focus:outline-none" style="padding: 6px 12px !important;">
+                                <p class="text-xs text-slate-500 mt-1" style="color: #64748b !important;">This additional contribution goes directly toward shortening your primary capital debt.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- DYNAMIC RESULTS DISPLAY PANEL -->
+                <div class="lg:col-span-5 rounded-2xl p-6 border flex flex-col justify-between h-full" style="background-color: #ecfdf5 !important; border-color: #d1fae5 !important;">
+                    <div>
+                        <h3 class="text-lg font-bold mb-6" style="color: #047857 !important;">Repayment Summary</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-xs font-medium uppercase tracking-wider" style="color: #475569 !important;">Scheduled Monthly EMI</p>
+                                <p class="text-3xl font-black mt-1" id="emiDisplay" style="color: #0f172a !important;">-</p>
+                            </div>
+                            
+                            <hr style="border-color: #d1fae5 !important;">
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-xs font-medium" style="color: #475569 !important;">Total Principal</p>
+                                    <p class="text-lg font-bold mt-0.5" id="totalPrincipalDisplay" style="color: #0f172a !important;">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium" style="color: #475569 !important;">Total Interest Payable</p>
+                                    <p class="text-lg font-bold mt-0.5" id="totalInterestDisplay" style="color: #0f172a !important;">-</p>
+                                </div>
+                            </div>
+
+                            <hr style="border-color: #d1fae5 !important;">
+
+                            <div>
+                                <p class="text-xs font-medium" style="color: #475569 !important;">Total Amount (Principal + Int)</p>
+                                <p class="text-xl font-bold mt-0.5" id="totalAmountDisplay" style="color: #0f172a !important;">-</p>
+                            </div>
+
+                            <!-- PREPAYMENT EXTRA METRICS CONTAINER -->
+                            <div id="savingsDisplayBox" class="hidden mt-4 pt-4 border-t-2 border-dashed bg-white p-4 rounded-xl border" style="background-color: #ffffff !important; border-color: #a7f3d0 !important;">
+                                <h4 class="text-xs font-bold uppercase tracking-wider mb-2" style="color: #047857 !important;">Your Pre-payment Savings</h4>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <p class="text-xs" style="color: #64748b !important;">Interest Saved</p>
+                                        <p class="text-md font-bold" id="interestSavedDisplay" style="color: #059669 !important;">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs" style="color: #64748b !important;">Tenure Reduced By</p>
+                                        <p class="text-md font-bold" id="tenureSavedDisplay" style="color: #059669 !important;">-</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ANALYTIC PIE DOUGHNUT CHART -->
+                    <div class="chart-container mt-6 flex justify-center items-center">
+                        <canvas id="emiPieChart"></canvas>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- EXPORT PDF ENGINE TRIGGER -->
+            <div class="mt-8 flex justify-end no-print">
+                <button onclick="window.print()" class="btn-primary-action text-white font-semibold px-5 py-2.5 rounded-lg shadow transition-colors flex items-center space-x-2 text-sm cursor-pointer" style="border:none !important;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    <span>Download / Print Schedule Report</span>
+                </button>
+            </div>
+
+            <!-- AMORTIZATION DATA VIEWER BLOCK -->
+            <div id="printable-area" class="mt-12 pt-8 border-t border-slate-200" style="border-top-color: #e2e8f0 !important;">
+                <h3 class="text-xl font-bold mb-4" style="color: #0f172a !important;">Annual Amortization Schedule (Repayment Breakup)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm" style="border-spacing: 0 !important;">
+                        <thead>
+                            <tr class="text-slate-700 border-b border-slate-200" style="border-bottom-color: #cbd5e1 !important;">
+                                <th class="p-3 font-semibold text-left">Year</th>
+                                <th class="p-3 font-semibold text-right">Beginning Balance</th>
+                                <th class="p-3 font-semibold text-right">Principal Paid</th>
+                                <th class="p-3 font-semibold text-right">Interest Paid</th>
+                                <th class="p-3 font-semibold text-right">Extra Pre-payments</th>
+                                <th class="p-3 font-semibold text-right">Ending Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="amortizationTableBody" class="text-slate-600 divide-y divide-slate-100" style="color: #475569 !important;">
+                            <!-- Injected dynamically via JS runtime loop -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- --- SEO MARKETING STRATEGY BREAKDOWN --- -->
+            <hr class="my-12 no-print" style="border-color: #e2e8f0 !important;">
+
+            <div class="prose prose-slate max-w-none mt-12 no-print">
+                <h2 class="text-2xl font-bold mb-4" style="color: #0f172a !important;">How to Use the Loan EMI Calculator for Financial Planning</h2>
+                <p class="text-slate-600 mb-6" style="color: #475569 !important;">
+                    Planning a major life milestone like acquiring an asset or managing credit needs precise calculations. An interactive <strong>Loan EMI calculator</strong> helps you break down complex borrowing numbers into manageable configurations. By understanding how changes in loan structures affect your monthly bills, you can evaluate true borrowing costs well before talking to any credit provider.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="p-5 rounded-xl border" style="background-color: #f8fafc !important; border-color: #e2e8f0 !important;">
+                        <h3 class="text-lg font-bold mb-2" style="color: #0f172a !important;">home loan emi calculator</h3>
+                        <p class="text-slate-600 text-sm" style="color: #475569 !important;">
+                            Mortgages generally come with long periods and significant capital amounts. Using a structured <strong>home loan emi calculator</strong> lets you see how small interest adjustments affect your aggregate repayments over 15 to 30 years. It visualizes the proportion of capital versus interest to help plan asset-building effectively.
+                        </p>
+                    </div>
+                    <div class="p-5 rounded-xl border" style="background-color: #f8fafc !important; border-color: #e2e8f0 !important;">
+                        <h3 class="text-lg font-bold mb-2" style="color: #0f172a !important;">personal loan emi calculator</h3>
+                        <p class="text-slate-600 text-sm" style="color: #475569 !important;">
+                            Unsecured borrowings often feature higher interest parameters with shorter validation horizons. Adjusting configurations on a <strong>personal loan emi calculator</strong> lets you verify whether a planned monthly installment fits easily within your household budgeting structure.
+                        </p>
+                    </div>
+                    <div class="p-5 rounded-xl border" style="background-color: #f8fafc !important; border-color: #e2e8f0 !important;">
+                        <h3 class="text-lg font-bold mb-2" style="color: #0f172a !important;">car loan emi calculator</h3>
+                        <p class="text-slate-600 text-sm" style="color: #475569 !important;">
+                            Automotive financing structures require balance so you don't over-leverage a depreciating asset. A <strong>car loan emi calculator</strong> ensures that your downpayment sizes, duration options, and operational costs synchronize seamlessly with real-world valuations.
+                        </p>
+                    </div>
+                    <div class="p-5 rounded-xl border" style="background-color: #f8fafc !important; border-color: #e2e8f0 !important;">
+                        <h3 class="text-lg font-bold mb-2" style="color: #0f172a !important;">Business loan EMI calculator</h3>
+                        <p class="text-slate-600 text-sm" style="color: #475569 !important;">
+                            Commercial growth demands continuous capital management. Utilizing a specialized <strong>Business loan EMI calculator</strong> enables operational teams to gauge impact on cash flow projections, keeping debt service ratios optimized for expansion strategies.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-2" style="color: #0f172a !important;">Education loan EMI calculator</h3>
+                    <p class="text-slate-600" style="color: #475569 !important;">
+                        Financing higher education requires balanced foresight. With an <strong>Education loan EMI calculator</strong>, students and parents can factor in accurate moratorium conditions, projecting expected future commitments against entry-level career earning curves.
+                    </p>
+                </div>
+
+                <!-- Dynamic Functional Accordion Context Block FAQs -->
+                <div class="mt-12 rounded-2xl p-6 border" style="background-color: #f8fafc !important; border-color: #e2e8f0 !important;">
+                    <h2 class="text-2xl font-bold mb-6" style="color: #0f172a !important;">Frequently Asked Questions (FAQs)</h2>
+                    <div class="space-y-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-100" style="background-color: #ffffff !important; border-color: #f1f5f9 !important;">
+                            <h4 class="font-bold mb-2" style="color: #0f172a !important;">What is an EMI and how is it calculated?</h4>
+                            <p class="text-sm text-slate-600" style="color: #475569 !important;">An Equated Monthly Installment (EMI) is a fixed payment amount made by a borrower to a lender at a specified date each calendar month. It comprises both principal repayment parts and interest allocations.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-100" style="background-color: #ffffff !important; border-color: #f1f5f9 !important;">
+                            <h4 class="font-bold mb-2" style="color: #0f172a !important;">How does making extra monthly pre-payments benefit my loan status?</h4>
+                            <p class="text-sm text-slate-600" style="color: #475569 !important;">Every extra unit contributed goes directly toward reducing the outstanding base principal. This action causes compounding interest drops over the remaining timeline, shrinking overall duration bounds and yielding considerable long-term monetary savings.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-100" style="background-color: #ffffff !important; border-color: #f1f5f9 !important;">
+                            <h4 class="font-bold mb-2" style="color: #0f172a !important;">Why do different loan types require separate presets?</h4>
+                            <p class="text-sm text-slate-600" style="color: #475569 !important;">Each facility type (like home vs personal) runs on structurally different market conditions. Home financing implies massive amounts and longer horizons, whereas personal borrowing implies smaller capital caps paired with premium rates.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CODE CONTROLLERS AND MATHEMATICAL RENDERING PROCESSORS -->
+    <script>
+        // Setup base modular presets configurations matrix
+        const loanPresets = {
+            home: {
+                title: "home loan emi calculator",
+                desc: "Calculate your long-term housing finance requirements with accurate yearly breaking structures.",
+                minAmt: 10000, maxAmt: 5000000, defAmt: 250000, stepAmt: 5000,
+                minRate: 3, maxRate: 15, defRate: 7.5,
+                minTenure: 5, maxTenure: 40, defTenure: 20,
+                defPrepay: 250
+            },
+            personal: {
+                title: "personal loan emi calculator",
+                desc: "Evaluate short-term unsecured personal credit lines with fast-amortizing projections.",
+                minAmt: 1000, maxAmt: 100000, defAmt: 20000, stepAmt: 1000,
+                minRate: 8, maxRate: 25, defRate: 12.5,
+                minTenure: 1, maxTenure: 7, defTenure: 3,
+                defPrepay: 100
+            },
+            car: {
+                title: "car loan emi calculator",
+                desc: "Estimate auto finance packages, vehicle acquisition costs, and custom repayment periods.",
+                minAmt: 2000, maxAmt: 150000, defAmt: 35000, stepAmt: 1000,
+                minRate: 4, maxRate: 18, defRate: 6.8,
+                minTenure: 1, maxTenure: 10, defTenure: 5,
+                defPrepay: 150
+            },
+            business: {
+                title: "Business loan EMI calculator",
+                desc: "Plan cash flow strategies, commercial growth funding, and operational corporate liabilities.",
+                minAmt: 5000, maxAmt: 2000000, defAmt: 100000, stepAmt: 5000,
+                minRate: 6, maxRate: 22, defRate: 9.5,
+                minTenure: 1, maxTenure: 15, defTenure: 7,
+                defPrepay: 500
+            },
+            education: {
+                title: "Education loan EMI calculator",
+                desc: "Structure educational growth costs, university degree fees, and future academic timelines.",
+                minAmt: 2000, maxAmt: 250000, defAmt: 50000, stepAmt: 1000,
+                minRate: 3, maxRate: 12, defRate: 5.5,
+                minTenure: 1, maxTenure: 15, defTenure: 10,
+                defPrepay: 100
+            }
+        };
+
+        // DOM Nodes Matrix References
+        const titleEl = document.getElementById('calculatorTitle');
+        const descEl = document.getElementById('calculatorDesc');
+        const currencySelect = document.getElementById('currency');
+        const amountInput = document.getElementById('amountInput');
+        const amountSlider = document.getElementById('amountSlider');
+        const rateInput = document.getElementById('rateInput');
+        const rateSlider = document.getElementById('rateSlider');
+        const tenureInput = document.getElementById('tenureInput');
+        const tenureSlider = document.getElementById('tenureSlider');
+        const enablePrepayment = document.getElementById('enablePrepayment');
+        const prepaymentForm = document.getElementById('prepaymentForm');
+        const monthlyPrepayment = document.getElementById('monthlyPrepayment');
+        const emiDisplay = document.getElementById('emiDisplay');
+        const totalPrincipalDisplay = document.getElementById('totalPrincipalDisplay');
+        const totalInterestDisplay = document.getElementById('totalInterestDisplay');
+        const totalAmountDisplay = document.getElementById('totalAmountDisplay');
+        const savingsDisplayBox = document.getElementById('savingsDisplayBox');
+        const interestSavedDisplay = document.getElementById('interestSavedDisplay');
+        const tenureSavedDisplay = document.getElementById('tenureSavedDisplay');
+        const amortizationTableBody = document.getElementById('amortizationTableBody');
+
+        let emiChart = null;
+        let activeType = 'home';
+
+        const currencyFormats = {
+            USD: { locale: 'en-US', symbol: '$' },
+            EUR: { locale: 'fi-FI', symbol: '€' },
+            GBP: { locale: 'en-GB', symbol: '£' },
+            INR: { locale: 'en-IN', symbol: '₹' },
+            PKR: { locale: 'en-PK', symbol: 'Rs' },
+            AED: { locale: 'ar-AE', symbol: 'AED' },
+            CAD: { locale: 'en-CA', symbol: '$' },
+            AUD: { locale: 'en-AU', symbol: '$' }
+        };
+
+        function getActiveCurrency() {
+            return currencyFormats[currencySelect.value] || currencyFormats.USD;
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat(getActiveCurrency().locale, {
+                style: 'currency',
+                currency: currencySelect.value,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        // Apply Tab Presets Configuration Modifier
+        function switchLoanPreset(type) {
+            activeType = type;
+            const config = loanPresets[type];
+            
+            titleEl.textContent = config.title;
+            descEl.textContent = config.desc;
+
+            amountSlider.min = config.minAmt; amountSlider.max = config.maxAmt; amountSlider.step = config.stepAmt; amountSlider.value = config.defAmt;
+            amountInput.value = config.defAmt;
+
+            rateSlider.min = config.minRate; rateSlider.max = config.maxRate; rateSlider.value = config.defRate;
+            rateInput.value = config.defRate;
+
+            tenureSlider.min = config.minTenure; tenureSlider.max = config.maxTenure; tenureSlider.value = config.defTenure;
+            tenureInput.value = config.defTenure;
+
+            monthlyPrepayment.value = config.defPrepay;
+
+            // Strict CSS class toggle mechanics
+            document.querySelectorAll('.loan-tab').forEach(btn => {
+                if(btn.getAttribute('data-type') === type) {
+                    btn.className = "loan-tab loan-tab-active px-4 py-3 text-sm font-bold rounded-xl border transition-all text-center cursor-pointer shadow-sm";
+                } else {
+                    btn.className = "loan-tab loan-tab-inactive px-4 py-3 text-sm font-bold rounded-xl border transition-all text-center cursor-pointer";
+                }
+            });
+
+            validateAndCalculate();
+        }
+
+        function syncInputs(source, target) {
+            target.value = source.value;
+            validateAndCalculate();
+        }
+
+        amountInput.addEventListener('input', () => syncInputs(amountInput, amountSlider));
+        amountSlider.addEventListener('input', () => syncInputs(amountSlider, amountInput));
+        rateInput.addEventListener('input', () => syncInputs(rateInput, rateSlider));
+        rateSlider.addEventListener('input', () => syncInputs(rateSlider, rateInput));
+        tenureInput.addEventListener('input', () => syncInputs(tenureInput, tenureSlider));
+        tenureSlider.addEventListener('input', () => syncInputs(tenureSlider, tenureInput));
+        
+        currencySelect.addEventListener('change', () => {
+            document.querySelectorAll('.currency-label').forEach(el => el.textContent = getActiveCurrency().symbol);
+            validateAndCalculate();
+        });
+
+        enablePrepayment.addEventListener('change', () => {
+            if (enablePrepayment.checked) {
+                prepaymentForm.classList.remove('hidden');
+                savingsDisplayBox.classList.remove('hidden');
+            } else {
+                prepaymentForm.classList.add('hidden');
+                savingsDisplayBox.classList.add('hidden');
+            }
+            validateAndCalculate();
+        });
+
+        monthlyPrepayment.addEventListener('input', validateAndCalculate);
+
+        document.querySelectorAll('.loan-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                switchLoanPreset(e.currentTarget.getAttribute('data-type'));
+            });
+        });
+
+        // Core Balance Calculator Engines
+        function validateAndCalculate() {
+            let principal = parseFloat(amountInput.value) || 0;
+            let annualRate = parseFloat(rateInput.value) || 0;
+            let years = parseFloat(tenureInput.value) || 0;
+            let extraMonthly = enablePrepayment.checked ? (parseFloat(monthlyPrepayment.value) || 0) : 0;
+
+            if (principal < 0) principal = 0;
+            if (annualRate < 0) annualRate = 0;
+            if (years < 0) years = 0;
+            if (extraMonthly < 0) extraMonthly = 0;
+
+            const monthlyRate = (annualRate / 12) / 100;
+            const totalMonths = years * 12;
+
+            let baseEmi = 0;
+            if (principal > 0 && totalMonths > 0) {
+                if (monthlyRate === 0) {
+                    baseEmi = principal / totalMonths;
+                } else {
+                    baseEmi = (principal * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+                }
+            }
+
+            let remainingBalanceBase = principal;
+            let totalInterestBase = 0;
+            for (let m = 1; m <= totalMonths; m++) {
+                let interestM = remainingBalanceBase * monthlyRate;
+                let principalM = baseEmi - interestM;
+                if (principalM > remainingBalanceBase) principalM = remainingBalanceBase;
+                remainingBalanceBase -= principalM;
+                totalInterestBase += interestM;
+            }
+
+            let remainingBalanceActive = principal;
+            let totalInterestActive = 0;
+            let activeMonthsCount = 0;
+            let annualAmortization = [];
+
+            let currentYearData = { year: 1, startBalance: principal, principalPaid: 0, interestPaid: 0, extraPaid: 0 };
+
+            for (let m = 1; m <= totalMonths; m++) {
+                if (remainingBalanceActive <= 0) break;
+
+                activeMonthsCount++;
+                let interestM = remainingBalanceActive * monthlyRate;
+                let principalM = baseEmi - interestM;
+                
+                if (principalM > remainingBalanceActive) principalM = remainingBalanceActive;
+                remainingBalanceActive -= principalM;
+                totalInterestActive += interestM;
+
+                currentYearData.principalPaid += principalM;
+                currentYearData.interestPaid += interestM;
+
+                if (remainingBalanceActive > 0 && extraMonthly > 0) {
+                    let factualExtra = extraMonthly;
+                    if (factualExtra > remainingBalanceActive) factualExtra = remainingBalanceActive;
+                    remainingBalanceActive -= factualExtra;
+                    currentYearData.extraPaid += factualExtra;
+                }
+
+                if (m % 12 === 0 || remainingBalanceActive <= 0) {
+                    currentYearData.endBalance = remainingBalanceActive;
+                    annualAmortization.push({...currentYearData});
+                    
+                    if (remainingBalanceActive > 0) {
+                        currentYearData = {
+                            year: (m / 12) + 1,
+                            startBalance: remainingBalanceActive,
+                            principalPaid: 0,
+                            interestPaid: 0,
+                            extraPaid: 0
+                        };
+                    }
+                }
+            }
+
+            const interestSaved = Math.max(0, totalInterestBase - totalInterestActive);
+            const monthsSaved = Math.max(0, totalMonths - activeMonthsCount);
+
+            emiDisplay.textContent = formatCurrency(baseEmi);
+            totalPrincipalDisplay.textContent = formatCurrency(principal);
+            totalInterestDisplay.textContent = formatCurrency(enablePrepayment.checked ? totalInterestActive : totalInterestBase);
+            totalAmountDisplay.textContent = formatCurrency(principal + (enablePrepayment.checked ? totalInterestActive : totalInterestBase));
+
+            if (enablePrepayment.checked) {
+                interestSavedDisplay.textContent = formatCurrency(interestSaved);
+                const savedY = Math.floor(monthsSaved / 12);
+                const savedM = monthsSaved % 12;
+                tenureSavedDisplay.textContent = `${savedY} Yrs, ${savedM} Mos`;
+            }
+
+            renderAmortizationTable(annualAmortization);
+            updateChartDisplay(principal, enablePrepayment.checked ? totalInterestActive : totalInterestBase);
+        }
+
+        function renderAmortizationTable(data) {
+            amortizationTableBody.innerHTML = '';
+            if (data.length === 0) {
+                amortizationTableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">No active operational parameters computed.</td></tr>`;
+                return;
+            }
+
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = "1px solid #f1f5f9";
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold" style="color: #0f172a !important; text-align: left;">Year ${Math.floor(row.year)}</td>
+                    <td class="p-3" style="text-align: right;">${formatCurrency(row.startBalance)}</td>
+                    <td class="p-3 font-medium" style="color: #047857 !important; text-align: right;">+${formatCurrency(row.principalPaid)}</td>
+                    <td class="p-3" style="color: #e11d48 !important; text-align: right;">${formatCurrency(row.interestPaid)}</td>
+                    <td class="p-3 font-medium" style="color: #2563eb !important; text-align: right;">${row.extraPaid > 0 ? '+' + formatCurrency(row.extraPaid) : '-'}</td>
+                    <td class="p-3 font-bold" style="color: #0f172a !important; text-align: right;">${formatCurrency(Math.max(0, row.endBalance))}</td>
+                `;
+                amortizationTableBody.appendChild(tr);
+            });
+        }
+
+        function updateChartDisplay(principal, interest) {
+            if (emiChart) {
+                emiChart.data.datasets[0].data = [principal, interest];
+                emiChart.update();
+            } else {
+                const ctx = document.getElementById('emiPieChart').getContext('2d');
+                emiChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Principal Amount', 'Total Interest'],
+                        datasets: [{
+                            data: [principal, interest],
+                            backgroundColor: ['#059669', '#f43f5e'],
+                            borderWidth: 2,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { weight: 'bold', family: 'Inter' }, padding: 15 }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function injectStructuralSchemas() {
+            const webAppSchema = {
+                "@context": "https://schema.org",
+                "@type": "WebApplication",
+                "name": "Advanced Multi-Purpose Loan EMI Calculator",
+                "url": window.location.href,
+                "applicationCategory": "FinancialApplication",
+                "operatingSystem": "All",
+                "description": "Calculate EMIs dynamically for home loans, personal loans, car loans, and business options using sliders, advanced graphs, and customized pre-payment modules."
+            };
+
+            const faqSchema = {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is an EMI and how is it calculated?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "An Equated Monthly Installment (EMI) is a fixed payment amount made by a borrower to a lender at a specified date each calendar month. It comprises both principal repayment parts and interest allocations."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How does making extra monthly pre-payments benefit my loan status?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Every extra unit contributed goes directly toward reducing the outstanding base principal. This action causes compounding interest drops over the remaining timeline, shrinking overall duration bounds and yielding considerable long-term monetary savings."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why do different loan types require separate presets?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Each facility type (like home vs personal) runs on structurally different market conditions. Home financing implies massive amounts and longer horizons, whereas personal borrowing implies smaller capital caps paired with premium rates."
+                        }
+                    }
+                ]
+            };
+
+            const appendScript = (data) => {
+                const script = document.createElement('script');
+                script.type = 'application/ld+json';
+                script.text = JSON.stringify(data);
+                document.head.appendChild(script);
+            };
+
+            appendScript(webAppSchema);
+            appendScript(faqSchema);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            switchLoanPreset('home');
+            injectStructuralSchemas();
+        });
+    </script>
+</body>
+</html>
+]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>
