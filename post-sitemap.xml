@@ -2,7 +2,19 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
 		<loc>https://toollayr.com/</loc>
-		<lastmod>2026-06-04T07:18:37+00:00</lastmod>
+		<lastmod>2026-06-05T04:51:53+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://toollayr.com/text-writing/case-converter-tool/</loc>
+		<lastmod>2026-06-05T04:51:53+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://toollayr.com/text-writing/random-word-generator/</loc>
+		<lastmod>2026-06-05T04:40:35+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://toollayr.com/text-writing/word-counter-online/</loc>
+		<lastmod>2026-06-05T04:30:43+00:00</lastmod>
 	</url>
 	<url>
 		<loc>https://toollayr.com/finance/roi-calculator/</loc>
